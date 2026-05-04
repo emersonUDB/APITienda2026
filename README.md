@@ -1,6 +1,6 @@
 # API REST - Productos (DPS441 Guía 9)
 
-API REST desarrollada con **Node.js + Express + MySQL** para la gestión de usuarios. Implementa buenas prácticas de seguridad como rate limiting, CORS controlado y cabeceras HTTP con Helmet.
+API REST desarrollada con **Node.js + Express + MySQL** para la gestión de usuarios y productos. Implementa buenas prácticas de seguridad como rate limiting, CORS controlado y cabeceras HTTP con Helmet.
 
 ## Tecnologías
 
@@ -52,6 +52,8 @@ CORS_ORIGIN=*
 
 Base URL: `http://localhost:3000/api/v1`
 
+### Usuarios
+
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | GET | `/usuarios` | Listar todos los usuarios |
@@ -60,7 +62,7 @@ Base URL: `http://localhost:3000/api/v1`
 | PUT | `/usuarios/:id` | Actualizar usuario |
 | DELETE | `/usuarios/:id` | Eliminar usuario |
 
-### Cuerpo para POST / PUT
+#### Cuerpo para POST / PUT
 
 ```json
 {
@@ -69,33 +71,82 @@ Base URL: `http://localhost:3000/api/v1`
 }
 ```
 
-### Formato de respuesta
+### Productos
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/productos` | Listar todos los productos |
+| GET | `/productos/:id` | Obtener producto por ID |
+| POST | `/productos` | Crear producto |
+| PUT | `/productos/:id` | Actualizar producto |
+| DELETE | `/productos/:id` | Eliminar producto |
+
+#### Cuerpo para POST / PUT
+
+```json
+{
+  "nombre": "Laptop Dell XPS",
+  "descripcion": "Laptop de alto rendimiento con procesador Intel i7",
+  "preciodecosto": 800.00,
+  "preciodeventa": 1200.00,
+  "cantidad": 10,
+  "fotografia": "https://ejemplo.com/imagen.jpg"
+}
+```
+
+### Formato de respuesta exitosa
 
 ```json
 {
   "success": true,
-  "message": "Usuarios obtenidos exitosamente.",
+  "message": "Productos obtenidos exitosamente.",
   "data": [ ... ]
 }
 ```
+
+### Formato de respuesta de error
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RECURSO_NO_ENCONTRADO",
+    "message": "Producto con id 5 no encontrado."
+  }
+}
+```
+
+### Códigos de estado
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Operación exitosa |
+| 201 | Recurso creado |
+| 204 | Eliminación exitosa (sin cuerpo) |
+| 400 | Datos inválidos o parámetro incorrecto |
+| 404 | Recurso no encontrado |
+| 500 | Error interno del servidor |
 
 ## Estructura del proyecto
 
 ```
 src/
 ├── config/
-│   ├── database.config.js   # Configuración de conexión MySQL
-│   └── database.js          # Pool de conexiones
+│   ├── database.config.js    # Configuración de conexión MySQL
+│   └── database.js           # Pool de conexiones
 ├── controllers/
+│   ├── productos.controller.js
 │   └── usuarios.controller.js
 ├── helpers/
-│   └── response.js          # Helper estandarizado de respuestas
+│   └── response.js           # Helper estandarizado de respuestas
 ├── models/
+│   ├── producto.model.js
 │   └── usuario.model.js
 ├── routes/
 │   ├── index.js
+│   ├── productos.routes.js
 │   └── usuarios.routes.js
-└── index.js                 # Entry point
+└── index.js                  # Entry point
 ```
 
 ## Rate Limiting
