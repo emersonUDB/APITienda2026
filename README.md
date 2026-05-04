@@ -56,11 +56,38 @@ Base URL: `http://localhost:3000/api/v1`
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
+| POST | `/usuarios/login` | Autenticar usuario |
 | GET | `/usuarios` | Listar todos los usuarios |
 | GET | `/usuarios/:id` | Obtener usuario por ID |
 | POST | `/usuarios` | Crear usuario |
 | PUT | `/usuarios/:id` | Actualizar usuario |
 | DELETE | `/usuarios/:id` | Eliminar usuario |
+
+#### Login — POST `/usuarios/login`
+
+```json
+{
+  "usuario": "nombre_usuario",
+  "contrasenia": "contraseña123"
+}
+```
+
+Respuesta exitosa `200`:
+```json
+{
+  "success": true,
+  "message": "Autenticacion exitosa.",
+  "data": { "id": 1, "usuario": "nombre_usuario" }
+}
+```
+
+Credenciales incorrectas `401`:
+```json
+{
+  "success": false,
+  "error": { "code": "NO_AUTORIZADO", "message": "Credenciales incorrectas." }
+}
+```
 
 #### Cuerpo para POST / PUT
 

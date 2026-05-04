@@ -26,6 +26,25 @@ const validateFields = (body) => {
     return errors;
 };
 
+exports.login = (req, res) => {
+    if (!req.body)
+        return response.error(res, 'El cuerpo de la solicitud no puede estar vacío.', 400, 'DATOS_INVALIDOS');
+
+    const { usuario, contrasenia } = req.body;
+
+    if (!usuario || typeof usuario !== 'string' || !contrasenia || typeof contrasenia !== 'string')
+        return response.error(res, 'Los campos usuario y contrasenia son requeridos.', 400, 'DATOS_INVALIDOS');
+
+    UsuarioModel.login(usuario.trim(), contrasenia, (err, data) => {
+        if (err) {
+            if (err.kind === 'not_found')
+                return response.error(res, 'Credenciales incorrectas.', 401, 'NO_AUTORIZADO');
+            return response.error(res, 'Ha ocurrido un error al autenticar el usuario.', 500, 'ERROR_INTERNO');
+        }
+        return response.success(res, data, 'Autenticacion exitosa.');
+    });
+};
+
 exports.findAll = (req, res) => {
     UsuarioModel.getAll((err, data) => {
         if (err)

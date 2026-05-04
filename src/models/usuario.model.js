@@ -63,6 +63,26 @@ Usuario.updateById = (id, usuario, result) => {
     );
 };
 
+Usuario.login = (usuario, contrasenia, result) => {
+    sql.query(
+        "SELECT id, usuario FROM usuarios WHERE usuario = ? AND contrasenia = ?",
+        [usuario, contrasenia],
+        (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+
+            if (res.length) {
+                result(null, res[0]);
+                return;
+            }
+
+            result({ kind: "not_found" }, null);
+        }
+    );
+};
+
 Usuario.remove = (id, result) => {
     sql.query("DELETE FROM usuarios WHERE id = ?", id, (err, res) => {
         if (err) {
